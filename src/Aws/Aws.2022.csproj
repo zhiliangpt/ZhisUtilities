@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<Nullable>enable</Nullable>
+		<RootNamespace>Zhis.Utilities</RootNamespace>
+		<AssemblyName>$(RootNamespace).Aws</AssemblyName>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Title>Zhi's Utilities of AWS</Title>
+		<VersionPrefix>1</VersionPrefix>
+		<Version>$(VersionPrefix).1.1</Version>
+		<Authors>zhiliang</Authors>
+		<Company />
+		<Description>Wraps some of the frequently used features from the AWS SDK into a smoother toolset.</Description>
+		<Copyright>Copyright 2022-2121 Zhi Liang</Copyright>
+		<PackageProjectUrl>https://github.com/zhiliangpt/ZhisUtilities</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/zhiliangpt/ZhisUtilities</RepositoryUrl>
+		<PackageTags>.net;standard;aws;library;utilities;</PackageTags>
+		<PackageReleaseNotes>Separates S3 and S3Copy.</PackageReleaseNotes>
+		<PackageReadmeFile>readme.md</PackageReadmeFile>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="AWSSDK.S3" Version="3.7.107.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="readme.md">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	</ItemGroup>
+
+</Project>
