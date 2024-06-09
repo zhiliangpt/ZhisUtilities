@@ -9,7 +9,7 @@
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Title>Zhi's Utilities of GitHub</Title>
 		<VersionPrefix>1</VersionPrefix>
-		<Version>$(VersionPrefix).0.1</Version>
+		<Version>$(VersionPrefix).3.5</Version>
 		<Authors>zhiliang</Authors>
 		<Company />
 		<Description>Wraps some of the frequently used features from the GitHub SDK into a smoother toolset.</Description>
@@ -18,8 +18,7 @@
 		<RepositoryUrl>https://github.com/zhiliangpt/Zhis.Utilities</RepositoryUrl>
 		<PackageTags>.net;standard;aws;library;utilities;</PackageTags>
 		<PackageReleaseNotes>
-			Initial publish.
-			Improved the missing XML comments for several public methods.
+			Added isIncluded parameter in RequestCommitsSince.
 		</PackageReleaseNotes>
 		<PackageReadmeFile>readme.md</PackageReadmeFile>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -28,7 +27,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Octokit" Version="7.0.1" />
+	  <PackageReference Include="Octokit" Version="7.1.0" />
 	</ItemGroup>
 
 	<ItemGroup>

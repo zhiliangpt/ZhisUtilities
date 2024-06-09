@@ -11,15 +11,37 @@ using Amazon.S3.Model;
 
 namespace Zhis.Utilities.Aws
 {
+	/// <summary>
+	/// Represents a class for interacting with Amazon S3 (Simple Storage Service).
+	/// </summary>
 	public class S3 : IDisposable
 	{
 		#region Properties
+		/// <summary>
+		/// Gets or sets the AWS access key ID used for authentication.
+		/// </summary>
 		public string AwsAccessKeyId { get; set; }
+		/// <summary>
+		/// Gets or sets the AWS secret access key used for authentication.
+		/// </summary>
 		public string AwsSecretAccessKey { get; set; }
+		/// <summary>
+		/// Gets or sets the AWS region endpoint for the S3 service.
+		/// </summary>
 		public RegionEndpoint RegionEndpoint { get; set; }
+		/// <summary>
+		/// Gets or sets the name of the S3 bucket.
+		/// </summary>
 		public string BucketName { get; set; }
 		#endregion
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="S3"/> class with the specified AWS credentials and S3 configuration.
+		/// </summary>
+		/// <param name="awsAccessKeyId">The AWS access key ID used for authentication.</param>
+		/// <param name="awsSecretAccessKey">The AWS secret access key used for authentication.</param>
+		/// <param name="regionEndpoint">The AWS region endpoint for the S3 service.</param>
+		/// <param name="bucketName">The name of the S3 bucket.</param>
 		public S3(string awsAccessKeyId, string awsSecretAccessKey, RegionEndpoint regionEndpoint, string bucketName)
 		{
 			AwsAccessKeyId = awsAccessKeyId;
