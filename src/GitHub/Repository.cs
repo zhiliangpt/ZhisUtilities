@@ -87,14 +87,14 @@ namespace Zhis.Utilities.GitHub
 				path.Substring(1);
 			}
 
-			IReadOnlyList<Octokit.RepositoryContent> contents = default;
+			IReadOnlyList<RepositoryContent> contents = default;
 			try
 			{
 				contents = await client.Repository.Content.GetAllContentsByRef(Settings.Owner, Settings.Name, path, branch);
 			}
 			catch (Octokit.NotFoundException)
 			{
-				contents = new List<Octokit.RepositoryContent>();
+				contents = new List<RepositoryContent>();
 			}
 			catch (Exception) { throw; }
 
@@ -321,8 +321,10 @@ namespace Zhis.Utilities.GitHub
 		/// It stores the provided UTF-8 text content in the file at the specified path and branch.
 		/// If the file does not exist, a new file is created. If the file exists, it is updated with the new content.
 		/// </remarks>
-		public async Task PutFileContent(string content, string path, string branch = "main")
+		public async Task<RepositoryContentChangeSet> PutFileContent(string content, string path, string branch = "main")
 		{
+			RepositoryContentChangeSet result = default;
+
 			var client = Client.GetClient(Settings.AccessToken);
 
 			//Remove the first character, if it starts with a "/".
@@ -337,14 +339,16 @@ namespace Zhis.Utilities.GitHub
 			{
 				// If the file does not exist, create a new file
 				CreateFileRequest request = new CreateFileRequest("Create " + Path.GetFileName(path), content, branch);
-				await client.Repository.Content.CreateFile(Settings.Owner, Settings.Name, path, request);
+				result = await client.Repository.Content.CreateFile(Settings.Owner, Settings.Name, path, request);
 			}
 			else
 			{
 				// If the file exists, update it
 				UpdateFileRequest request = new UpdateFileRequest("Update " + Path.GetFileName(path), content, meta.Sha);
-				await client.Repository.Content.UpdateFile(Settings.Owner, Settings.Name, path, request);
+				result = await client.Repository.Content.UpdateFile(Settings.Owner, Settings.Name, path, request);
 			}
+
+			return result;
 		}
 
 		#endregion
