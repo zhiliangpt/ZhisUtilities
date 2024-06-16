@@ -1,16 +1,15 @@
-﻿using Markdig;
-using Markdig.Syntax;
-using Markdig.Syntax.Inlines;
-using Octokit;
-using Octokit.Models.Request.Enterprise;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Markdig;
+using Markdig.Syntax;
+using Markdig.Syntax.Inlines;
+using Octokit;
+using Octokit.Models.Request.Enterprise;
 using Zhis.Utilities.GitHub;
 
 namespace Zhis.Utilities.GitHub
@@ -22,7 +21,6 @@ namespace Zhis.Utilities.GitHub
 		public string AltText { get; set; }
 		public string Title { get; set; }
 		public bool IsAsset { get; set; }
-
 
 		#region Methods
 		public async Task<(byte[] imageBinary, string fileName)> GetImageBinaryAsync()
@@ -37,26 +35,15 @@ namespace Zhis.Utilities.GitHub
 				{
 					var response = await httpClient.GetAsync(this.Url);
 					response.EnsureSuccessStatusCode();
-					string fileName = null;
 
-					// 从响应头中获取文件名
-					if (response.Content.Headers.ContentDisposition != null)
-					{
-						fileName = response.Content.Headers.ContentDisposition.FileNameStar ?? response.Content.Headers.ContentDisposition.FileName;
-					}
-					if (fileName == null)
-					{
-						// 如果没有Content-Disposition头，尝试使用Content-Type头推断文件扩展名
-						var contentType = response.Content.Headers.ContentType.MediaType;
-						var extension = contentType switch
-						{
-							"image/jpeg" => ".jpg",
-							"image/png" => ".png",
-							_ => ".bin" // 默认扩展名
-						};
-						var assetIdMatch = Regex.Match(this.Url, @"[^/]+$");
-						fileName = assetIdMatch.Success ? assetIdMatch.Value + extension : "downloaded_image" + extension;
-					}
+					/*
+					// 从URL中提取文件名
+					string fileName = ExtractFileNameFromUrl(this.Url);
+					*/
+
+					// 从跳转后的URL中提取文件名
+					var finalUrl = response.RequestMessage.RequestUri.ToString();
+					string fileName = ExtractFileNameFromUrl(finalUrl);
 
 					var imageBinary = await response.Content.ReadAsByteArrayAsync();
 					return (imageBinary, fileName);
@@ -67,6 +54,13 @@ namespace Zhis.Utilities.GitHub
 					return (null, null);
 				}
 			}
+		}
+
+		private static string ExtractFileNameFromUrl(string url)
+		{
+			var uri = new Uri(url);
+			var segments = uri.Segments;
+			return segments.Length > 0 ? segments[^1].Split('?')[0] : "downloaded_image.bin";
 		}
 		#endregion
 	}
@@ -206,7 +200,7 @@ if (info.IsAsset && info is ImageAsset asset)
 {
     Console.WriteLine($"Owner: {asset.Owner}, User: {asset.User}, Repo: {asset.Repo}, AssetId: {asset.AssetId}");
 }
-		*/
+        */
 
 		public async Task<List<ImageInfo>> GetImagesFromMarkdown(bool attachRepoSettings = false)
 		{
@@ -283,7 +277,6 @@ if (info.IsAsset && info is ImageAsset asset)
 
 		#endregion
 
-
 		#region Disposing
 		// Has Dispose() already been called?
 		Boolean isDisposed = false;
@@ -301,7 +294,6 @@ if (info.IsAsset && info is ImageAsset asset)
 		/// Releases the allocated resources.
 		/// </summary>
 		/// <param name="isFromDispose">Indicates whether the resources are being released from the <see cref="Dispose"/> method.</param>
-
 		protected void ReleaseResources(bool isFromDispose)
 		{
 			// Try to release resources only if they have not been previously released.
